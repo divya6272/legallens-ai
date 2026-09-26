@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LegalLens AI — Understand your legal documents</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <h1>⚖️ LegalLens AI</h1>
+    <p class="tagline">Understand, compare, and navigate legal documents in plain language.</p>
+  </header>
+
+  <main id="main">
+    <form id="assist-form" aria-describedby="disclaimer-note">
+      <fieldset>
+        <legend>1. Choose what you need</legend>
+        <div class="task-grid" role="radiogroup" aria-label="Task">
+          <label><input type="radio" name="task" value="simplify" checked> Simplify a document</label>
+          <label><input type="radio" name="task" value="compare"> Compare two documents</label>
+          <label><input type="radio" name="task" value="analyze"> Highlight risks &amp; obligations</label>
+          <label><input type="radio" name="task" value="ask"> Ask a question</label>
+          <label><input type="radio" name="task" value="checklist"> Generate a checklist</label>
+          <label><input type="radio" name="task" value="prep-lawyer"> Prepare for a lawyer</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Paste your document text</legend>
+        <label for="text-a" class="field-label" id="label-a">Document text</label>
+        <textarea id="text-a" name="text" rows="8" maxlength="20000" required
+          aria-required="true" aria-describedby="hint-a"></textarea>
+        <p id="hint-a" class="hint">Paste the text of your contract, agreement, or policy. Max 20,000 characters.</p>
+
+        <div id="text-b-wrap" hidden>
+          <label for="text-b" class="field-label">Second document (for comparison)</label>
+          <textarea id="text-b" name="textB" rows="8" maxlength="20000"></textarea>
+        </div>
+
+        <div id="question-wrap" hidden>
+          <label for="question" class="field-label">Your question</label>
+          <input type="text" id="question" name="question" maxlength="500" />
+        </div>
+      </fieldset>
+
+      <button type="submit" id="submit-btn">Analyze</button>
+    </form>
+
+    <section aria-live="polite" id="result-section" hidden>
+      <h2>Result</h2>
+      <div id="result-output" tabindex="-1"></div>
+    </section>
+
+    <p id="disclaimer-note" class="hint">
+      LegalLens AI provides general information to help you understand documents — it is not a
+      substitute for advice from a licensed attorney.
+    </p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
