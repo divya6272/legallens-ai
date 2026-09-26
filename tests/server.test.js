@@ -97,6 +97,71 @@ test('POST /api/legal-assist rejects compare without textB', async () => {
   server.close();
 });
 
+test('GET /api/health returns ok', async () => {
+  mockAnthropicFetch('irrelevant');
+  const app = require('../server');
+  const server = app.listen(0);
+  const { port } = server.address();
+
+  const res = await fetch(`http://localhost:${port}/api/health`);
+  const data = await res.json();
+  assert.strictEqual(res.status, 200);
+  assert.strictEqual(data.status, 'ok');
+  server.close();
+});
+
+test('POST /api/legal-assist rejects text over the character limit', async () => {
+  mockAnthropicFetch('irrelevant');
+  const app = require('../server');
+  const server = app.listen(0);
+  const { port } = server.address();
+
+  const res = await fetch(`http://localhost:${port}/api/legal-assist`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task: 'simplify', text: 'a'.repeat(20001) }),
+  });
+  assert.strictEqual(res.status, 400);
+  server.close();
+});
+
+test('identical repeat requests are served from cache (second call skips the model)', async () => {
+  let callCount = 0;
+  global.fetch = async (url, opts) => {
+    if (typeof url === 'string' && url.includes('api.groq.com')) {
+      callCount += 1;
+      return {
+        ok: true,
+        json: async () => ({ choices: [{ message: { content: 'Cached-friendly reply.' } }] }),
+      };
+    }
+    return realFetch(url, opts);
+  };
+
+  const app = require('../server');
+  const server = app.listen(0);
+  const { port } = server.address();
+  const payload = { task: 'simplify', text: 'Cache me please, this is a unique test document.' };
+
+  const first = await fetch(`http://localhost:${port}/api/legal-assist`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  await first.json();
+
+  const second = await fetch(`http://localhost:${port}/api/legal-assist`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const secondData = await second.json();
+
+  assert.strictEqual(callCount, 1, 'the upstream model should only be called once');
+  assert.strictEqual(secondData.cached, true);
+  server.close();
+});
+
 test.after(() => {
   global.fetch = realFetch;
 });
