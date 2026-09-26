@@ -1,0 +1,19 @@
+{
+  "name": "legallens-ai",
+  "version": "1.0.0",
+  "description": "GenAI-powered legal document assistant: simplify, compare, analyze, ask, checklist, and prep-for-lawyer tools.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.4.0",
+    "dotenv": "^16.4.5",
+    "cors": "^2.8.5"
+  }
+}
