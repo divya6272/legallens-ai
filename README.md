@@ -1,5 +1,7 @@
 # LegalLens AI — GenAI-Powered Legal Assistance & Access
 
+**Live Demo:** https://legallens-ai-3-mmu7.onrender.com/
+
 LegalLens AI helps everyday people understand, compare, and navigate legal
 documents — contracts, rental agreements, terms of service, policies — without
 needing a law degree. It does **not** give legal advice; it gives people the
